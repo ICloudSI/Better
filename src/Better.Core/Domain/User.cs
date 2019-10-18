@@ -17,7 +17,7 @@ namespace Better.Core.Domain
         {
         }
 
-        public User(Guid id, string email, string username, string role,string password, string salt)
+        public User(Guid id, string email, string username, string role, string password, string salt)
         {
             Id = id;
             SetEmail(email);
@@ -25,7 +25,7 @@ namespace Better.Core.Domain
             SetPassword(password, salt);
             Role = role;
             CreatedAt = DateTime.UtcNow;
-            Coins =10;
+            Coins = 10;
         }
 
         public void SetEmail(string email)
