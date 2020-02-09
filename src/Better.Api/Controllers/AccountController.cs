@@ -31,6 +31,8 @@ namespace Better.Api.Controllers
         [HttpPost("register")]
         public async Task <IActionResult> Post([FromBody] Register command)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             await _userService.RegisterAsync(Guid.NewGuid(), command.Email,command.Username,command.Password);
 
             return Created("/account", null);

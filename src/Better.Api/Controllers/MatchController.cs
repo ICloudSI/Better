@@ -15,6 +15,7 @@ namespace Better.Api.Controllers
         {
             _matchService = matchService;
         }
+        
         [HttpGet]
         public async Task<IActionResult> Get()
         {

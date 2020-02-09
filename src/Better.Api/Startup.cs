@@ -11,6 +11,8 @@ using Better.Infrastructure.IoC;
 using Better.Infrastructure.Repository;
 using Better.Infrastructure.Services;
 using Better.Infrastructure.Settings;
+using Better.Infrastructure.Validator;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,7 +42,8 @@ namespace Better.Api
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonOptions(x => x.SerializerSettings.Formatting  = Formatting.Indented);
+            .AddJsonOptions(x => x.SerializerSettings.Formatting  = Formatting.Indented)
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IValidator>());
             
             services.AddSingleton<IJwtHandler, JwtHandler>();
             
@@ -65,7 +68,7 @@ namespace Better.Api
                       ValidateAudience = false
                   };
               });
-
+            
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));

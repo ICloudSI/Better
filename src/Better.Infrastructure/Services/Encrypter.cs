@@ -36,7 +36,8 @@ namespace Better.Infrastructure.Services
         }
  
         var pbkdf2 = new Rfc2898DeriveBytes(value, GetBytes(salt), DeriveBytesIterationsCount);
- 
+
+        
         return Convert.ToBase64String(pbkdf2.GetBytes(SaltSize));
     }
  
