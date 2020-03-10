@@ -1,0 +1,13 @@
+.prawa{
+    margin-right: 3%;
+	float: right; 
+    display:inline;
+    font-size: larger;
+}
+
+.lewa{
+    margin-left: 3%;
+	float: left; 
+    display:inline;
+    font-size: larger;
+}

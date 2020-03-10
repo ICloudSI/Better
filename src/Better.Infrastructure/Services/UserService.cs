@@ -54,12 +54,11 @@ namespace Better.Infrastructure.Services
                 throw new Exception("Invalid credentials");
             }
 
-            var jwt = _jwtHandler.CreateToken(user.Id, user.Role);
+            var jwt = _jwtHandler.CreateToken(user.Id);
             return new TokenDto
             {
                 Token = jwt.Token,
-                Expires = jwt.Expires,
-                Role = user.Role
+                User = _mapper.Map<UserDto>(user)
             };
         }
 

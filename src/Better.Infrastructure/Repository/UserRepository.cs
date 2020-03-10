@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Better.Infrastructure.Repository
 {
-    public class UserRepository : IUserRepository , ISqlRepository
+    public class UserRepository// : IUserRepository , ISqlRepository
     {
         private readonly BetterContext _context;
 

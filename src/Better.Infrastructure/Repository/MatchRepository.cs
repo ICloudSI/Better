@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Better.Infrastructure.Repository
 {
-    public class MatchRepository : IMatchRepository, ISqlRepository
+    public class MatchRepository //: IMatchRepository, ISqlRepository
     {
         private readonly BetterContext _context;
 

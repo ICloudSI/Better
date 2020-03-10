@@ -20,14 +20,15 @@ namespace Better.Core.Domain
         public User(Guid id, string email, string username, string role, string password, string salt)
         {
             Id = id;
-            SetEmail(email);
-            SetUsername(username);
-            SetPassword(password, salt);
+            Email = email;
+            Username = username; 
+            Password = password;
+            Salt = salt;
             Role = role;
             CreatedAt = DateTime.UtcNow;
             Coins = 10;
         }
-
+/*
         public void SetEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -81,7 +82,7 @@ namespace Better.Core.Domain
             Password = password;
             Salt = salt;
         }
-
+*/
         public void AddCoins(decimal coins)
         {
             if (coins < 0)

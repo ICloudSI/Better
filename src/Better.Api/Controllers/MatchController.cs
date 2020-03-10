@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Better.Api.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class MatchController : ApiControllerBase
     {
         private readonly IMatchService _matchService;
@@ -21,14 +22,14 @@ namespace Better.Api.Controllers
         {
             var matches = await _matchService.BrowseAsync();
 
-            return Json(matches);
+            return Ok(matches);
         }
         [HttpGet("{matchId}")]
         public async Task<IActionResult> Get(Guid matchId)
         {
-            var matches = await _matchService.GetDetailsAsync(matchId);
+            var matches = await _matchService.GetAsync(matchId);
 
-            return Json(matches);
+            return Ok(matches);
         }
         [HttpPut("AddBet/{matchId}")]
         [Authorize]
@@ -42,7 +43,7 @@ namespace Better.Api.Controllers
         [HttpPut("SetWinner/{matchId}")]
         public async Task<IActionResult> GetSetWinner(Guid matchId,[FromBody]SetWinner command)
         {
-            await _matchService.SetWinnerAsync(matchId, command.Winner);
+            //await _matchService.SetWinnerAsync(matchId, command.Winner);
             return NoContent();
         }
         [HttpPut("CreateMatch")]

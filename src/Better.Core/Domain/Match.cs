@@ -6,8 +6,8 @@ namespace Better.Core.Domain
     public class Match : Enity
     {
         private ISet<Bet> _bets = new HashSet<Bet>();
-        public string Team1 { get; protected set; }
-        public string Team2 { get; protected set; }
+        public Team Team1 { get; protected set; }
+        public Team Team2 { get; protected set; }
         public DateTime StartTime { get; protected set; }
         public string Winner { get; protected set; }
         public IEnumerable<Bet> Bets => _bets;
@@ -16,14 +16,15 @@ namespace Better.Core.Domain
         {
         }
 
-        public Match(Guid id, string team1, string team2, DateTime startTime)
+        public Match(Team team1, Team team2, DateTime startTime)
         {
-            Id = id;
-            SetTeams(team1, team2);
-            SetStartTime(startTime);
+            Id = Guid.NewGuid();
+            Team1 = team1;
+            Team2 = team2;
+            StartTime = startTime;
         }
 
-        public void AddBet(User user, string team, decimal amountCoins)
+        public void AddBet(User user, Team team, decimal amountCoins)
         {
             if (user.Coins < amountCoins)
             {
@@ -34,9 +35,10 @@ namespace Better.Core.Domain
                 throw new Exception($"The bet can not be less than 1 Coin");
             }
             user.SubstractCoins(amountCoins);
-            _bets.Add(Bet.Create(Guid.NewGuid(), user.Id, this.Id, team, amountCoins));
+            _bets.Add(new Bet(user.Id, this.Id, team, amountCoins));
 
         }
+        /*
         public void SetTeams(string team1, string team2)
         {
             if (string.IsNullOrEmpty(team1))
@@ -75,5 +77,7 @@ namespace Better.Core.Domain
 
         public static Match Create(Guid matchId, string team1, string team2, DateTime startTime)
             => new Match(matchId, team1, team2, startTime);
+    }
+*/
     }
 }

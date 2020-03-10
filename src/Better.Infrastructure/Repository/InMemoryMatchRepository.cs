@@ -9,12 +9,7 @@ namespace Better.Infrastructure.Repository
 {
     public class InMemoryMatchRepository : IMatchRepository
     {
-        private static readonly ISet<Match> _matches = new HashSet<Match>
-        {
-            new Match(Guid.NewGuid(),"Astralis","Liquid",DateTime.UtcNow.AddHours(2)),
-            new Match(Guid.NewGuid(),"NRG","Natus Vincere",DateTime.UtcNow.AddHours(3)),
-
-        };
+        private static readonly ISet<Match> _matches = new HashSet<Match>();
 
         public async Task<Match> GetAsync(Guid id)
             => await Task.FromResult(_matches.SingleOrDefault(x => x.Id == id));

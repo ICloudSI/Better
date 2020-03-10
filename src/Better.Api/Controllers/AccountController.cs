@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Better.Api.Controllers
 {
     [Route("[controller]")]
+    [ApiController]
     public class AccountController : ApiControllerBase
     {
         private readonly IUserService _userService;
@@ -18,18 +19,18 @@ namespace Better.Api.Controllers
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
-            => Json(await _userService.GetUserAsync(UserId));
+            => Ok(await _userService.GetUserAsync(UserId));
 
         [HttpGet("Browse")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAll()
         {
             var users= await _userService.BrowseAsync();
 
-            return Json(users);
+            return Ok(users);
         }
         [HttpPost("register")]
-        public async Task <IActionResult> Post([FromBody] Register command)
+        public async Task <IActionResult> Post( Register command)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -38,7 +39,7 @@ namespace Better.Api.Controllers
             return Created("/account", null);
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Post([FromBody]Login command)
-            => Json(await _userService.LoginAsync(command.Email, command.Password));
+        public async Task<IActionResult> Post(Login command)
+            => Ok(await _userService.LoginAsync(command.Email, command.Password));
     }
 }

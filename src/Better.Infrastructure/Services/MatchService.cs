@@ -12,13 +12,15 @@ namespace Better.Infrastructure.Services
     {
         private readonly IMatchRepository _matchRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ITeamRepository _teamRepository;
         private readonly IMapper _mapper;
 
-        public MatchService(IMatchRepository matchRepository, IUserRepository userRepository,
+        public MatchService(IMatchRepository matchRepository, IUserRepository userRepository, ITeamRepository teamRepository,
             IMapper mapper)
         {
             _matchRepository = matchRepository;
             _userRepository = userRepository;
+            _teamRepository = teamRepository;
             _mapper = mapper;
         }
 
@@ -29,6 +31,7 @@ namespace Better.Infrastructure.Services
             {
                 throw new Exception($"Match with id: '{id}' does not exist.");
             }
+
 
             return _mapper.Map<MatchDto>(match);
         }
@@ -51,8 +54,20 @@ namespace Better.Infrastructure.Services
         }
         public async Task CreateMatchAsync(Guid id, string team1, string team2, DateTime startTime)
         {
-            var match = Match.Create(id, team1, team2, startTime);
+            var team1FromRepo = await _teamRepository.GetByNameAsync(team1);
+            if(team1FromRepo == null)
+                throw new Exception("Team 1 doesn't exist in base. Create this team");
+
+            var team2FromRepo = await _teamRepository.GetByNameAsync(team2);
+             if(team2FromRepo == null)
+                throw new Exception("Team 2 doesn't exist in base. Create this team");
+
+            var match = new Match(team1FromRepo, team2FromRepo, startTime);
+            team1FromRepo.AddNewMatchToHistory(match);
+            team2FromRepo.AddNewMatchToHistory(match);
             await _matchRepository.AddAsync(match);
+            await _teamRepository.UpdateAsync(team1FromRepo);
+            await _teamRepository.UpdateAsync(team2FromRepo);
         }
         public async Task AddBetAsync(Guid id, Guid userId, string team, decimal coins)
         {
@@ -66,8 +81,13 @@ namespace Better.Infrastructure.Services
             {
                 throw new Exception($"Match with id: '{id}' does not exist.");
             }
+            var teamFromRepo = await _teamRepository.GetByNameAsync(team);
+            if(teamFromRepo == null)
+            {
+                throw new Exception($"Team with name: {team} doesn't exist.");
+            }
 
-            match.AddBet(user, team, coins);
+            match.AddBet(user, teamFromRepo, coins);
             await _userRepository.UpdateAsync(user);
             await _matchRepository.UpdateAsync(match);
         }
@@ -89,7 +109,7 @@ namespace Better.Infrastructure.Services
 
             await _matchRepository.DeleteAsync(match);
         }
-
+/*
         public async Task SetWinnerAsync(Guid id, string team)
         {
             var match = await _matchRepository.GetAsync(id);
@@ -112,7 +132,7 @@ namespace Better.Infrastructure.Services
             }
             
         }
-
+*/
 
     }
 }
