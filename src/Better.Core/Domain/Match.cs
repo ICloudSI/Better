@@ -9,7 +9,7 @@ namespace Better.Core.Domain
         public Team Team1 { get; protected set; }
         public Team Team2 { get; protected set; }
         public DateTime StartTime { get; protected set; }
-        public string Winner { get; protected set; }
+        public Team Winner { get; protected set; }
         public IEnumerable<Bet> Bets => _bets;
 
         protected Match()

@@ -12,10 +12,12 @@ namespace Better.Api.Controllers
     public class AccountController : ApiControllerBase
     {
         private readonly IUserService _userService;
+
         public AccountController(IUserService userService)
         {
             _userService = userService;
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
@@ -30,7 +32,7 @@ namespace Better.Api.Controllers
             return Ok(users);
         }
         [HttpPost("register")]
-        public async Task <IActionResult> Post( Register command)
+        public async Task <IActionResult> Post(Register command)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
