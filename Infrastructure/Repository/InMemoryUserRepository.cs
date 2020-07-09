@@ -29,19 +29,21 @@ namespace Infrastructure.Repository
             return await Task.FromResult(users);
         }
 
-        public Task AddAsync(User user)
+        public async Task AddAsync(User user)
         {
-            throw new NotImplementedException();
+            _users.Add(user);
+            await Task.CompletedTask;
         }
 
-        public Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            await Task.CompletedTask;
         }
 
-        public Task DeleteAsync(User user)
+        public async Task DeleteAsync(User user)
         {
-            throw new NotImplementedException();
+            _users.Remove(user);
+            await Task.CompletedTask;
         }
     }
 }
