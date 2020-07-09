@@ -6,22 +6,33 @@ namespace Core.Domain
 {
     public class User : Entity
     {
-        public string Email { get; protected set; }
-        public string Username { get; protected set; }
-        public string FullName { get; protected set; }
-        public string Role { get; protected set; }
-        public string Password { get; protected set; }
-        public string Salt { get; protected set; }
-        public decimal Coins { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
+        public string Email { get; set; }
+        public string Username { get; set; }
+        public string FullName { get; set; }
+        public string Role { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        public decimal Coins { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public User(Guid id, string email, string username, string role, string password, string salt)
+        protected User()
+        {}
+        public User(Guid id, string email, string username, string role, byte[] passwordHash, byte[] passwordSalt)
         {
             Id = id;
             Email = email;
             Username = username;
-            Password = password;
-            Salt = salt;
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
+            Role = role;
+            CreatedAt = DateTime.UtcNow;
+            Coins = 10;
+        }
+        public User(Guid id, string email, string username, string role)
+        {
+            Id = id;
+            Email = email;
+            Username = username;
             Role = role;
             CreatedAt = DateTime.UtcNow;
             Coins = 10;

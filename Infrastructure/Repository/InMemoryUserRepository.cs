@@ -11,10 +11,11 @@ namespace Infrastructure.Repository
 {
     public class InMemoryUserRepository: IUserRepository
     {
+        
         private static readonly ISet<User> _users = new HashSet<User>
         {
-            new User(Guid.NewGuid(),"email@test.com","Janusz123","user","secret123","salt"),
-            new User(Guid.NewGuid(),"email1@test.com","Janusz1234","user","secret123","salt"),
+            new User(Guid.NewGuid(),"email@test.com","Janusz123","user"),
+            new User(Guid.NewGuid(),"email1@test.com","Janusz1234","user"),
         };
 
         public async Task<User> GetAsync(Guid id)
