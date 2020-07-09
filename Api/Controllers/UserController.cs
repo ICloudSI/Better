@@ -39,13 +39,30 @@ namespace Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterModel registerModel)
         {
-            var user = _mapper.Map<User>(registerModel);
+            
 
             try
             {
                 // create user
-                _userService.RegisterAsync(user, registerModel.Password);
-                return Ok();
+                var user = _userService.RegisterAsync(registerModel);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody]LoginModel loginModel)
+        {
+
+
+            try
+            {
+                // create user
+                var token = await _userService.LoginAsync(loginModel);
+                return Ok(token);
             }
             catch (Exception ex)
             {
