@@ -34,7 +34,9 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
+            services.AddScoped<IMatchRepository, InMemoryMatchRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IJwtHandler, JwtHandler>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
@@ -83,7 +85,8 @@ namespace Api
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
+                
             }
 
             app.UseHttpsRedirection();

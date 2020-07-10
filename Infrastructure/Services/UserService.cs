@@ -6,6 +6,7 @@ using AutoMapper;
 using Core.Domain;
 using Core.Repository;
 using Infrastructure.DTO;
+using Infrastructure.Excpections;
 
 
 namespace Infrastructure.Services
@@ -30,28 +31,30 @@ namespace Infrastructure.Services
             return user;
         }
 
-        public async Task<IEnumerable<User>> BrowseAsync()
+        public async Task<IEnumerable<UserDTO>> BrowseAsync()
         {
             var users = await _userRepository.BrowseAsync();
-            return users;
+            var usersToReturn = _mapper.Map<IEnumerable<UserDTO>>(users);
+
+            return usersToReturn;
         }
 
         public async Task<TokenJwtDTO> LoginAsync(LoginModel loginData)
         {
             if (string.IsNullOrEmpty(loginData.Email) || string.IsNullOrEmpty(loginData.Password))
             {
-                throw new Exception("Email or password is incorrect");
+                throw new AppException("Email or password is incorrect");
             }
 
             var user = await _userRepository.GetAsync(loginData.Email);
             if (user == null)
             {
-                throw new Exception($"User with email {loginData.Email} doesn't exist");
+                throw new AppException($"User with email {loginData.Email} doesn't exist");
             }
 
             if (!VerifyPasswordHash(loginData.Password, user.PasswordHash, user.PasswordSalt))
             {
-                throw new Exception("Email or password is incorrect");
+                throw new AppException("Email or password is incorrect");
             }
 
             var token = _jwtHandler.CreateToken(user);
@@ -68,7 +71,7 @@ namespace Infrastructure.Services
             var user = await _userRepository.GetAsync(userToRegister.Email);
             if (user != null)
             {
-                throw new Exception($"User with email: {registeringUser.Email} already exist");
+                throw new AppException($"User with email: {registeringUser.Email} already exist");
             }
 
             byte[] passwordHash, passwordSalt;

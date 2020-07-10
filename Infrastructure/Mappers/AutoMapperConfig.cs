@@ -13,6 +13,9 @@ namespace Infrastructure.Mappers
         {
             CreateMap<User, UserDTO>();
             CreateMap<RegisterModel, User>();
+            CreateMap<Participant, ParticipantDTO>();
+            CreateMap<Participants, ParticipantsDTO>();
+            CreateMap<Match, MatchDTO>();
         }
     }
 }
