@@ -6,7 +6,7 @@ namespace Core.Domain
 {
     public class Match:Entity
     {
-        public Participants Participants { get; set; }
+        public ParticipantsMatch Participants { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime BeginsAt { get; set; }
         public Participant Winner { get; set; }
@@ -15,7 +15,7 @@ namespace Core.Domain
         {
         }
 
-        public Match(Guid id, Participants participants, DateTime createdAt, DateTime beginsAt)
+        public Match(Guid id, ParticipantsMatch participants, DateTime createdAt, DateTime beginsAt)
         {
             Id = id;
             Participants = participants;

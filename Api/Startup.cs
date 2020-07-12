@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Repository;
+using Infrastructure.EF;
 using Infrastructure.Repository;
 using Infrastructure.Services;
 using Infrastructure.Settings;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,16 +35,24 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, InMemoryUserRepository>();
-            services.AddScoped<IMatchRepository, InMemoryMatchRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMatchRepository, MatchRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IJwtHandler, JwtHandler>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
 
+            var sqlSettingsSection = Configuration.GetSection("ConnectionStrings");
+            services.Configure<SqlSettings>(sqlSettingsSection);
+            services.AddDbContext<BetterContext>( options =>
+                options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase")));
+            
+
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+
+            
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);

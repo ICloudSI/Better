@@ -4,12 +4,14 @@ using System.Text;
 
 namespace Core.Domain
 {
-    public class Participants
+    public class ParticipantsMatch : Entity
     {
         public Participant Home { get; set; }
         public Participant Away { get; set; }
 
-        public Participants(Participant home, Participant away)
+        protected ParticipantsMatch()
+        {}
+        public ParticipantsMatch(Participant home, Participant away)
         {
             Home = home;
             Away = away;
