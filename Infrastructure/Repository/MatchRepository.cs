@@ -13,6 +13,11 @@ namespace Infrastructure.Repository
     {
         private readonly BetterContext _dbContext;
 
+        public MatchRepository(BetterContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public async Task<Match> GetAsync(Guid id)
             => await _dbContext.Matches.SingleOrDefaultAsync(x => x.Id == id);
 
@@ -20,7 +25,12 @@ namespace Infrastructure.Repository
             => await _dbContext.Matches.ToListAsync();
 
         public async Task AddAsync(Match match)
-            => await _dbContext.Matches.AddAsync(match);
+        {
+            {
+                await _dbContext.Matches.AddAsync(match);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
 
         public async Task UpdateAsync(Match match)
         {

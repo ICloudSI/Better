@@ -35,6 +35,9 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BetterContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();
             services.AddScoped<IUserService, UserService>();
@@ -43,11 +46,9 @@ namespace Api
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
 
-            var sqlSettingsSection = Configuration.GetSection("ConnectionStrings");
-            services.Configure<SqlSettings>(sqlSettingsSection);
-            services.AddDbContext<BetterContext>( options =>
-                options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase")));
             
+
+
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);

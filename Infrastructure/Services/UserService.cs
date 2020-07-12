@@ -82,7 +82,7 @@ namespace Infrastructure.Services
             userToRegister.PasswordHash = passwordHash;
             userToRegister.PasswordSalt = passwordSalt;
 
-           _userRepository.AddAsync(userToRegister);
+           await _userRepository.AddAsync(userToRegister);
 
             var userToReturn = _mapper.Map<UserDTO>(userToRegister);
             return userToReturn;

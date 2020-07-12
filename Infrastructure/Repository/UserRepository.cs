@@ -13,6 +13,10 @@ namespace Infrastructure.Repository
     {
         private readonly BetterContext _dbContext;
 
+        public UserRepository(BetterContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<User> GetAsync(Guid id)
             => await _dbContext.Users.SingleOrDefaultAsync(x => x.Id == id);
@@ -22,23 +26,24 @@ namespace Infrastructure.Repository
 
 
         public async Task<IEnumerable<User>> BrowseAsync()
-        {
-            throw new NotImplementedException();
-        }
+            => await _dbContext.Users.ToListAsync();
 
         public async Task AddAsync(User user)
         {
-            throw new NotImplementedException();
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(User user)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
