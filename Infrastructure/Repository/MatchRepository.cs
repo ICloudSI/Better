@@ -19,10 +19,10 @@ namespace Infrastructure.Repository
         }
 
         public async Task<Match> GetAsync(Guid id)
-            => await _dbContext.Matches.SingleOrDefaultAsync(x => x.Id == id);
+            => await _dbContext.Matches.Include(matchBets => matchBets.Bets).SingleOrDefaultAsync(x => x.Id == id);
 
         public async Task<IEnumerable<Match>> BrowseAsync()
-            => await _dbContext.Matches.ToListAsync();
+            => await _dbContext.Matches.Include(matchBets => matchBets.Bets).ToListAsync();
 
         public async Task AddAsync(Match match)
         {

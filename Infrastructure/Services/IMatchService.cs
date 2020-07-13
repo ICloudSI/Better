@@ -9,5 +9,6 @@ namespace Infrastructure.Services
     public interface IMatchService: IService
     {
         Task<IEnumerable<MatchDTO>> BrowseMatch();
+        Task<MatchDTO> CreateMatch(CreateMatchModel createMatch);
     }
 }

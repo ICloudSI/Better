@@ -17,5 +17,7 @@ namespace Infrastructure.EF
         public DbSet<User> Users { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Match> Matches { get; set; }
+        public DbSet<Bet> Bets { get; set; }
+
     }
 }

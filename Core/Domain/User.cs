@@ -6,6 +6,7 @@ namespace Core.Domain
 {
     public class User : Entity
     {
+        private ISet<Bet> _bets = new HashSet<Bet>();
         public string Email { get; set; }
         public string Username { get; set; }
         public string FullName { get; set; }
@@ -14,6 +15,7 @@ namespace Core.Domain
         public byte[] PasswordSalt { get; set; }
         public decimal Coins { get; set; }
         public DateTime CreatedAt { get; set; }
+        public IEnumerable<Bet> Bets => _bets;
 
         protected User()
         {}

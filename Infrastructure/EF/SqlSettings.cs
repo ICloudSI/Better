@@ -6,6 +6,6 @@ namespace Infrastructure.EF
 {
     public class SqlSettings
     {
-        public string WebApiDatabase { get; set; }
+        public string DefaultConnection { get; set; }
     }
 }

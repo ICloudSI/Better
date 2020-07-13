@@ -19,14 +19,14 @@ namespace Infrastructure.Repository
         }
 
         public async Task<User> GetAsync(Guid id)
-            => await _dbContext.Users.SingleOrDefaultAsync(x => x.Id == id);
+            => await _dbContext.Users.Include(userBets => userBets.Bets).SingleOrDefaultAsync(user => user.Id == id);
 
         public async Task<User> GetAsync(string email)
-            => await _dbContext.Users.SingleOrDefaultAsync(x => x.Email == email);
+            => await _dbContext.Users.Include(userBets => userBets.Bets).SingleOrDefaultAsync(x => x.Email == email);
 
 
         public async Task<IEnumerable<User>> BrowseAsync()
-            => await _dbContext.Users.ToListAsync();
+            => await _dbContext.Users.Include(userBets => userBets.Bets).ToListAsync();
 
         public async Task AddAsync(User user)
         {

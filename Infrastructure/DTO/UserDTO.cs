@@ -12,5 +12,6 @@ namespace Infrastructure.DTO
         public string FullName { get; set; }
         public string Role { get; set; }
         public decimal Coins { get; set; }
+        public IEnumerable<BetDTO> Bets { get; set; }
     }
 }

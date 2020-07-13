@@ -16,6 +16,13 @@ namespace Infrastructure.Mappers
             CreateMap<Participant, ParticipantDTO>();
             CreateMap<ParticipantsMatch, ParticipantsDTO>();
             CreateMap<Match, MatchDTO>();
+            CreateMap<Bet, BetDTO>().ForMember(dest => dest.OwnerId,
+                opt => opt.
+                    MapFrom(src => src.MatchConcerned.Id)).
+                ForMember(dest => dest.OwnerId,
+                opt => opt.
+                    MapFrom(src => src.Owner.Id));
+
         }
     }
 }

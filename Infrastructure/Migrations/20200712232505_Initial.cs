@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -90,6 +90,55 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    MatchConcernedId = table.Column<Guid>(nullable: true),
+                    Value = table.Column<decimal>(nullable: false),
+                    BetParticipantId = table.Column<Guid>(nullable: true),
+                    OwnerId = table.Column<Guid>(nullable: true),
+                    BetDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bets_Participants_BetParticipantId",
+                        column: x => x.BetParticipantId,
+                        principalTable: "Participants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bets_Matches_MatchConcernedId",
+                        column: x => x.MatchConcernedId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bets_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bets_BetParticipantId",
+                table: "Bets",
+                column: "BetParticipantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bets_MatchConcernedId",
+                table: "Bets",
+                column: "MatchConcernedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bets_OwnerId",
+                table: "Bets",
+                column: "OwnerId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Matches_ParticipantsId",
                 table: "Matches",
@@ -113,6 +162,9 @@ namespace Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Bets");
+
             migrationBuilder.DropTable(
                 name: "Matches");
 

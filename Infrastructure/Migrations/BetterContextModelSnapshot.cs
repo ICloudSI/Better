@@ -19,6 +19,38 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Core.Domain.Bet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BetDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("BetParticipantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MatchConcernedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BetParticipantId");
+
+                    b.HasIndex("MatchConcernedId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Bets");
+                });
+
             modelBuilder.Entity("Core.Domain.Match", b =>
                 {
                     b.Property<Guid>("Id")
@@ -114,6 +146,21 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Core.Domain.Bet", b =>
+                {
+                    b.HasOne("Core.Domain.Participant", "BetParticipant")
+                        .WithMany()
+                        .HasForeignKey("BetParticipantId");
+
+                    b.HasOne("Core.Domain.Match", "MatchConcerned")
+                        .WithMany("Bets")
+                        .HasForeignKey("MatchConcernedId");
+
+                    b.HasOne("Core.Domain.User", "Owner")
+                        .WithMany("Bets")
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("Core.Domain.Match", b =>
