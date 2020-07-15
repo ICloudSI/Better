@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Domain;
@@ -19,10 +20,17 @@ namespace Infrastructure.Repository
         }
 
         public async Task<Match> GetAsync(Guid id)
-            => await _dbContext.Matches.Include(matchBets => matchBets.Bets).SingleOrDefaultAsync(x => x.Id == id);
+            => await _dbContext.Matches.Include(matchBets => matchBets.Bets).
+                Include(matchParticipant => matchParticipant.Participants.Home).
+                Include(matchParticipant => matchParticipant.Participants.Away).
+                SingleOrDefaultAsync(x => x.Id == id);
 
         public async Task<IEnumerable<Match>> BrowseAsync()
-            => await _dbContext.Matches.Include(matchBets => matchBets.Bets).ToListAsync();
+            => await _dbContext.Matches.
+                Include(matchBets => matchBets.Bets).
+                Include(matchParticipant => matchParticipant.Participants.Home).
+                Include(matchParticipant => matchParticipant.Participants.Away).
+                ToListAsync();
 
         public async Task AddAsync(Match match)
         {

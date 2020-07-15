@@ -12,7 +12,9 @@ namespace Infrastructure.Repository
     {
         private static readonly ISet<Match> _matches = new HashSet<Match>
         {
+            /*
             new Match(Guid.NewGuid(),new ParticipantsMatch(new Participant("Polska"), new Participant("Niemcy") ), DateTime.Now, DateTime.Now.AddMinutes(60))
+            */
             
         };
 

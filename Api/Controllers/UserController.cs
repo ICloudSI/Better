@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Domain;
@@ -10,12 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 using Infrastructure.DTO;
 using Infrastructure.Excpections;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ApiControllerBase
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
@@ -33,6 +35,13 @@ namespace Api.Controllers
             var usersToReturn = await _userService.BrowseAsync();
 
             return Ok(usersToReturn);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            return Ok(await _userService.GetUserAsync(UserId));
         }
 
         [HttpPost("Register")]
@@ -62,5 +71,19 @@ namespace Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpPut("Coins/Add")]
+        public async Task<IActionResult> AddCoins([FromBody] AddCoinsModel addCoinsModel)
+        {
+            try
+            {
+                return Ok(await _userService.AddCoins(addCoinsModel));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        
     }
 }

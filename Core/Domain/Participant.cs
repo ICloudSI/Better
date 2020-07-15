@@ -8,8 +8,9 @@ namespace Core.Domain
     {
         public string Name { get; set; }
 
-        public Participant(string name)
+        public Participant(Guid id, string name)
         {
+            Id = id;
             Name = name;
         }
     }

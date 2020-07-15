@@ -19,7 +19,7 @@ namespace Infrastructure.Repository
         }
 
         public async Task<User> GetAsync(Guid id)
-            => await _dbContext.Users.Include(userBets => userBets.Bets).SingleOrDefaultAsync(user => user.Id == id);
+            => await _dbContext.Users.Include(userBets => userBets.Bets).ThenInclude(x=>x.MatchConcerned).SingleOrDefaultAsync(user => user.Id == id);
 
         public async Task<User> GetAsync(string email)
             => await _dbContext.Users.Include(userBets => userBets.Bets).SingleOrDefaultAsync(x => x.Email == email);

@@ -35,14 +35,20 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddDbContext<BetterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();
+            services.AddScoped<IParticipantRepository, ParticipantRepository>();
+            services.AddScoped<IBetRepository, BetRepository>();
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMatchService, MatchService>();
+            services.AddScoped<IBetService, BetService>();
+            services.AddScoped<IParticipantService, ParticipantService>();
+
             services.AddScoped<IJwtHandler, JwtHandler>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
@@ -63,21 +69,6 @@ namespace Api
                 })
                 .AddJwtBearer(x =>
                 {
-                    x.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                        {
-                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            var userId = Guid.Parse(context.Principal.Identity.Name);
-                            var user = userService.GetUserAsync(userId);
-                            if (user == null)
-                            {
-                                // return unauthorized if user no longer exists
-                                context.Fail("Unauthorized");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
@@ -102,6 +93,7 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
 

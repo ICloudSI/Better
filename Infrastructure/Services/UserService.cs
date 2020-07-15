@@ -24,11 +24,11 @@ namespace Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<User> GetUserAsync(Guid id)
+        public async Task<UserDTO> GetUserAsync(Guid id)
         {
             var user = await _userRepository.GetAsync(id);
 
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
         public async Task<IEnumerable<UserDTO>> BrowseAsync()
@@ -37,6 +37,25 @@ namespace Infrastructure.Services
             var usersToReturn = _mapper.Map<IEnumerable<UserDTO>>(users);
 
             return usersToReturn;
+        }
+
+        public async Task<UserDTO> AddCoins(AddCoinsModel addCoins)
+        {
+            var user = await _userRepository.GetAsync(addCoins.UserId);
+            if (user == null)
+            {
+                throw new AppException($"User with id {addCoins.UserId} doesn't exist");
+
+            }
+
+            if (addCoins.Value <= 0)
+            {
+                throw new AppException("Value can't be negative");
+            }
+
+            user.Coins += addCoins.Value;
+            await _userRepository.UpdateAsync(user);
+            return _mapper.Map<UserDTO>(user);
         }
 
         public async Task<TokenJwtDTO> LoginAsync(LoginModel loginData)

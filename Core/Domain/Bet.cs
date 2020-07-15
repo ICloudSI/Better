@@ -11,5 +11,18 @@ namespace Core.Domain
         public Participant BetParticipant { get; set; }
         public User Owner { get; set; }
         public DateTime BetDate { get; set; }
+
+        protected Bet()
+        {
+
+        }
+        public Bet(Match matchConcerned, decimal value, Participant betParticipant, User owner, DateTime betDate)
+        {
+            MatchConcerned = matchConcerned;
+            Value = value;
+            BetParticipant = betParticipant;
+            Owner = owner;
+            BetDate = betDate;
+        }
     }
 }

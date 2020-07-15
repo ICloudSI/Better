@@ -9,8 +9,9 @@ namespace Infrastructure.Services
 {
     public interface IUserService: IService
     {
-        Task<User> GetUserAsync(Guid id);
+        Task<UserDTO> GetUserAsync(Guid id);
         Task<IEnumerable<UserDTO>> BrowseAsync();
+        Task<UserDTO> AddCoins(AddCoinsModel addCoins);
         Task<UserDTO> RegisterAsync(RegisterModel registeringUser);
         Task<TokenJwtDTO> LoginAsync(LoginModel loginData);
     }
