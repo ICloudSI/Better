@@ -10,5 +10,8 @@ namespace Infrastructure.DTO
         public DateTime CreatedAt { get; set; }
         public DateTime BeginsAt { get; set; }
         public ParticipantDTO Winner { get; set; }
+        public double ValueBetOnHome { get; set; }
+        public double ValueBetOnAway { get; set; }
+        //public IEnumerable<BetDTO> Bets { get; set; }
     }
 }

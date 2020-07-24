@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.DTO
 {
-    public class UserDTO
+    public class FullUserWithBetsDTO
     {
         public Guid Id { get; set; }
         public string Email { get; set; }

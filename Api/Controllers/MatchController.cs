@@ -34,7 +34,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> CreateMatch([FromBody] CreateMatchModel createMatchModel)
+        public async Task<IActionResult> CreateMatch(CreateMatchModel createMatchModel)
         {
             try
             {
@@ -45,15 +45,15 @@ namespace Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        [HttpGet("{id}/Browse")]
-        public async Task<IActionResult> BrowseAll(Guid id)
+        [HttpGet("{matchId}/Bets/Browse")]
+        public async Task<IActionResult> BrowseAll(Guid matchId)
         {
-            return Ok(await _betService.BrowseMatchBets(id));
+            return Ok(await _betService.BrowseMatchBets(matchId));
         }
 
         [HttpPost("Bet/Add")]
         [Authorize]
-        public async Task<IActionResult> AddBet([FromBody] CreateBetModel createBetModel)
+        public async Task<IActionResult> AddBet(CreateBetModel createBetModel)
         {
             createBetModel.OwnerId = UserId;
             try

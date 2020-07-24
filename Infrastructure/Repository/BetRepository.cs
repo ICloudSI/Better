@@ -30,6 +30,11 @@ namespace Infrastructure.Repository
                 Include(match => match.MatchConcerned).
                 Include(participant => participant.BetParticipant).
                 Where(bet => bet.MatchConcerned.Id == matchId).ToListAsync();
+        public async Task<IEnumerable<Bet>> GetUserBetsAsync(Guid userId)
+            => await _dbContext.Bets.Include(ownerUser => ownerUser.Owner).
+                Include(match => match.MatchConcerned).
+                Include(participant => participant.BetParticipant).
+                Where(bet => bet.Owner.Id == userId).ToListAsync();
 
         public async Task<IEnumerable<Bet>> BrowseAsync()
             => await _dbContext.Bets.Include(ownerUser => ownerUser.Owner).

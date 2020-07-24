@@ -30,14 +30,5 @@ namespace Core.Domain
             CreatedAt = DateTime.UtcNow;
             Coins = 10;
         }
-        public User(Guid id, string email, string username, string role)
-        {
-            Id = id;
-            Email = email;
-            Username = username;
-            Role = role;
-            CreatedAt = DateTime.UtcNow;
-            Coins = 10;
-        }
     }
 }

@@ -36,6 +36,12 @@ namespace Infrastructure.Services
             var bets = await _betRepository.GetMatchBetsAsync(id);
             return _mapper.Map<IEnumerable<BetDTO>>(bets);
         }
+        public async Task<IEnumerable<BetDTO>> BrowseUserBets(Guid id)
+        {
+            var bets = await _betRepository.GetUserBetsAsync(id);
+            return _mapper.Map<IEnumerable<BetDTO>>(bets);
+        }
+
 
         public async Task<BetDTO> CreateBet(CreateBetModel newBet)
         {
@@ -53,7 +59,7 @@ namespace Infrastructure.Services
 
             var participants = await _participantRepository.GetAsync(newBet.BetParticipantId);
 
-            var ownerUser = await _userRepository.GetAsync(newBet.OwnerId);
+            var ownerUser = await _userRepository.GetSimpleUserAsync(newBet.OwnerId);
             if (newBet.Value <= 0)
             {
                 throw new AppException($"The bet cannot be negative.");

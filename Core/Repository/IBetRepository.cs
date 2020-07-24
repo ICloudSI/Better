@@ -10,6 +10,7 @@ namespace Core.Repository
     {
         Task<Bet> GetAsync(Guid id);
         Task<IEnumerable<Bet>> GetMatchBetsAsync(Guid matchId);
+        Task<IEnumerable<Bet>> GetUserBetsAsync(Guid userId);
         Task<IEnumerable<Bet>> BrowseAsync();
         Task AddAsync(Bet bet);
         Task UpdateAsync(Bet bet);

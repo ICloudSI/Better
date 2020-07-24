@@ -24,24 +24,24 @@ namespace Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<UserDTO> GetUserAsync(Guid id)
+        public async Task<FullUserWithBetsDTO> GetUserAsync(Guid id)
         {
-            var user = await _userRepository.GetAsync(id);
+            var user = await _userRepository.GetFullUserAsync(id);
 
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<FullUserWithBetsDTO>(user);
         }
 
-        public async Task<IEnumerable<UserDTO>> BrowseAsync()
+        public async Task<IEnumerable<SimpleUserDTO>> BrowseAsync()
         {
             var users = await _userRepository.BrowseAsync();
-            var usersToReturn = _mapper.Map<IEnumerable<UserDTO>>(users);
+            var usersToReturn = _mapper.Map<IEnumerable<SimpleUserDTO>>(users);
 
             return usersToReturn;
         }
 
-        public async Task<UserDTO> AddCoins(AddCoinsModel addCoins)
+        public async Task<SimpleUserDTO> AddCoins(AddCoinsModel addCoins)
         {
-            var user = await _userRepository.GetAsync(addCoins.UserId);
+            var user = await _userRepository.GetSimpleUserAsync(addCoins.UserId);
             if (user == null)
             {
                 throw new AppException($"User with id {addCoins.UserId} doesn't exist");
@@ -55,17 +55,18 @@ namespace Infrastructure.Services
 
             user.Coins += addCoins.Value;
             await _userRepository.UpdateAsync(user);
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<SimpleUserDTO>(user);
         }
 
         public async Task<TokenJwtDTO> LoginAsync(LoginModel loginData)
         {
+            loginData.Email = loginData.Email.ToLower();
             if (string.IsNullOrEmpty(loginData.Email) || string.IsNullOrEmpty(loginData.Password))
             {
                 throw new AppException("Email or password is incorrect");
             }
 
-            var user = await _userRepository.GetAsync(loginData.Email);
+            var user = await _userRepository.GetSimpleUserAsync(loginData.Email);
             if (user == null)
             {
                 throw new AppException($"User with email {loginData.Email} doesn't exist");
@@ -78,16 +79,17 @@ namespace Infrastructure.Services
 
             var token = _jwtHandler.CreateToken(user);
 
-            token.User = _mapper.Map<UserDTO>(user);
+            token.User = _mapper.Map<SimpleUserDTO>(user);
 
             return token;
         }
 
-        public async Task<UserDTO> RegisterAsync(RegisterModel registeringUser)
+        public async Task<SimpleUserDTO> RegisterAsync(RegisterModel registeringUser)
         {
             var userToRegister = _mapper.Map<User>(registeringUser);
+            userToRegister.Email = userToRegister.Email.ToLower();
 
-            var user = await _userRepository.GetAsync(userToRegister.Email);
+            var user = await _userRepository.GetSimpleUserAsync(userToRegister.Email);
             if (user != null)
             {
                 throw new AppException($"User with email: {registeringUser.Email} already exist");
@@ -103,7 +105,7 @@ namespace Infrastructure.Services
 
            await _userRepository.AddAsync(userToRegister);
 
-            var userToReturn = _mapper.Map<UserDTO>(userToRegister);
+            var userToReturn = _mapper.Map<SimpleUserDTO>(userToRegister);
             return userToReturn;
         }
 

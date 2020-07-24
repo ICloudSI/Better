@@ -28,7 +28,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateParticipant([FromBody] CreateParticipantModel participantModel)
+        public async Task<IActionResult> CreateParticipant(CreateParticipantModel participantModel)
         {
             return Ok(await _participantService.CreateParticipant(participantModel));
         }

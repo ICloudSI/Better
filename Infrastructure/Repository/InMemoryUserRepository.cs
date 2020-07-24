@@ -14,14 +14,24 @@ namespace Infrastructure.Repository
         
         private static readonly ISet<User> _users = new HashSet<User>
         {
-            new User(Guid.NewGuid(),"email@test.com","Janusz123","user"),
-            new User(Guid.NewGuid(),"email1@test.com","Janusz1234","user"),
+            /*new User(Guid.NewGuid(),"email@test.com","Janusz123","user"),
+            new User(Guid.NewGuid(),"email1@test.com","Janusz1234","user"),*/
         };
 
-        public async Task<User> GetAsync(Guid id)
+        public async Task<User> GetFullUserAsync(Guid id)
             => await Task.FromResult(_users.SingleOrDefault(x => x.Id == id));
 
-        public async Task<User> GetAsync(string email)
+        public async Task<User> GetFullUserAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> GetSimpleUserAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<User> GetSimpleUserAsync(string email)
             => await Task.FromResult(_users.SingleOrDefault(x => x.Email == email));
 
         public async Task<IEnumerable<User>> BrowseAsync()

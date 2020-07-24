@@ -8,6 +8,6 @@ namespace Infrastructure.DTO
     public class TokenJwtDTO
     {
         public string Token { get; set; }
-        public UserDTO User { get; set; }
+        public SimpleUserDTO User { get; set; }
     }
 }

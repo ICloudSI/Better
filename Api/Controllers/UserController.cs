@@ -20,11 +20,13 @@ namespace Api.Controllers
     public class UserController : ApiControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IBetService _betService;
         private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IBetService betService, IMapper mapper)
         {
             _userService = userService;
+            _betService = betService;
             _mapper = mapper;
 
         }
@@ -44,8 +46,17 @@ namespace Api.Controllers
             return Ok(await _userService.GetUserAsync(UserId));
         }
 
+        [HttpGet("Bets")]
+        [Authorize]
+        public async Task<IActionResult> GetUserBets()
+    {
+            return Ok(await _betService.BrowseUserBets(UserId));
+            
+        }
+
+
         [HttpPost("Register")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel registerModel)
+        public async Task<IActionResult> RegisterUser(RegisterModel registerModel)
         {
             try
             {
@@ -59,7 +70,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody]LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginModel loginModel)
         {
             try
             {
@@ -73,7 +84,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("Coins/Add")]
-        public async Task<IActionResult> AddCoins([FromBody] AddCoinsModel addCoinsModel)
+        public async Task<IActionResult> AddCoins(AddCoinsModel addCoinsModel)
         {
             try
             {
