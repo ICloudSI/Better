@@ -15,12 +15,14 @@ namespace Infrastructure.Services
         private readonly IMatchRepository _matchRepository;
         private readonly IParticipantRepository _participantRepository;
         private readonly IMapper _mapper;
+        private readonly IAlgorithm _algorithm;
 
-        public MatchService(IMatchRepository matchRepository, IParticipantRepository participantRepository, IMapper mapper)
+        public MatchService(IMatchRepository matchRepository, IParticipantRepository participantRepository, IMapper mapper, IAlgorithm algorithm)
         {
             _matchRepository = matchRepository;
             _participantRepository = participantRepository;
             _mapper = mapper;
+            _algorithm = algorithm;
         }
 
         public async Task<IEnumerable<MatchDTO>> BrowseMatch()
@@ -52,5 +54,29 @@ namespace Infrastructure.Services
 
             return _mapper.Map<MatchDTO>(match);
         }
+
+        public async Task<MatchDTO> SetWinner(SetWinnerModel setWinner)
+        {
+            var matchFromRepo = await _matchRepository.GetAsync(setWinner.MatchId);
+            if (matchFromRepo == null)
+            {
+                throw new AppException("Match doesn't exist.");
+            }
+
+            var winner = await _participantRepository.GetAsync(setWinner.WinnerId);
+
+            if (matchFromRepo.Participants.Away != winner && matchFromRepo.Participants.Home != winner)
+            {
+                throw new AppException("Did not participate in the match.");
+            }
+
+            matchFromRepo.Status = MatchStatus.Finished;
+            matchFromRepo.Winner = winner;
+
+            await _matchRepository.UpdateAsync(matchFromRepo);
+
+            return _mapper.Map<MatchDTO>(matchFromRepo);
+        }
+
     }
 }

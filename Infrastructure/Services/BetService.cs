@@ -16,14 +16,17 @@ namespace Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly IParticipantRepository _participantRepository;
         private readonly IMapper _mapper;
+        private readonly IAlgorithm _algorithm;
 
-        public BetService(IBetRepository betRepository, IMatchRepository matchRepository, IUserRepository userRepository, IParticipantRepository participantRepository, IMapper mapper)
+        public BetService(IBetRepository betRepository, IMatchRepository matchRepository, IUserRepository userRepository, 
+            IParticipantRepository participantRepository, IMapper mapper, IAlgorithm algorithm)
         {
             _betRepository = betRepository;
             _matchRepository = matchRepository;
             _userRepository = userRepository;
             _participantRepository = participantRepository;
             _mapper = mapper;
+            _algorithm = algorithm;
         }
 
         public async Task<IEnumerable<BetDTO>> BrowseAll()
@@ -82,6 +85,31 @@ namespace Infrastructure.Services
             await _betRepository.AddAsync(bet);
 
             return _mapper.Map<BetDTO>(bet);
+        }
+
+        public async Task WithdrawPrize(Guid matchId)
+        {
+            var matchFromRepo = await _matchRepository.GetAsync(matchId);
+            if (matchFromRepo != null && matchFromRepo.Status != MatchStatus.Finished)
+            {
+                throw new AppException("The match is not over");
+            }
+
+            var bets = await _betRepository.GetMatchBetsAsync(matchId);
+            var multiplyPrize = _algorithm.MultiplierForWinner(bets, matchFromRepo.Winner);
+            foreach (var bet in bets)
+            {
+                if (bet.BetParticipant == matchFromRepo.Winner && bet.Realized == false)
+                {
+                    var prize = Decimal.Round(bet.Value * multiplyPrize);
+                    var user = bet.Owner;
+                    user.Coins += prize;
+                    await _userRepository.UpdateAsync(user);
+                }
+
+                bet.Realized = true;
+                await _betRepository.UpdateAsync(bet);
+            }
         }
     }
 }

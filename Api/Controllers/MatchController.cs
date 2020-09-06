@@ -65,5 +65,18 @@ namespace Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [HttpPost("{matchId}/SetWinner")]
+        public async Task<IActionResult> SetWinner(SetWinnerModel setWinnerModel,Guid matchId)
+        {
+            setWinnerModel.MatchId = matchId;
+            try
+            {
+                return Ok(await _matchService.SetWinner(setWinnerModel));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

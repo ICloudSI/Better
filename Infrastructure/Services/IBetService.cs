@@ -12,5 +12,6 @@ namespace Infrastructure.Services
         Task<IEnumerable<BetDTO>> BrowseMatchBets(Guid id);
         Task<IEnumerable<BetDTO>> BrowseUserBets(Guid id);
         Task<BetDTO> CreateBet(CreateBetModel newBet);
+        Task WithdrawPrize(Guid matchId);
     }
 }

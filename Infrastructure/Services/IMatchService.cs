@@ -10,5 +10,6 @@ namespace Infrastructure.Services
     {
         Task<IEnumerable<MatchDTO>> BrowseMatch();
         Task<MatchDTO> CreateMatch(CreateMatchModel createMatch);
+        Task<MatchDTO> SetWinner(SetWinnerModel setWinner);
     }
 }
