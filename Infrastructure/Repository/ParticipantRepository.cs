@@ -9,40 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class ParticipantRepository: IParticipantRepository
+    public class ParticipantRepository: EntityRepository<Participant>, IParticipantRepository
     {
-        private readonly BetterContext _dbContext;
 
-        public ParticipantRepository(BetterContext dbContext)
+        public ParticipantRepository(BetterContext context):base(context)
         {
-            _dbContext = dbContext;
         }
 
-        public async Task<Participant> GetAsync(Guid id)
-            => await _dbContext.Participants.SingleOrDefaultAsync(x => x.Id == id);
-
-        public async Task<IEnumerable<Participant>> BrowseAsync()
-            => await _dbContext.Participants.ToListAsync();
-
-        public async Task AddAsync(Participant participant)
-        {
-            {
-                await _dbContext.Participants.AddAsync(participant);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdateAsync(Participant participant)
-        {
-            _dbContext.Participants.Update(participant);
-            await _dbContext.SaveChangesAsync();
-        }
-
-
-        public async Task DeleteAsync(Participant participant)
-        {
-            _dbContext.Participants.Remove(participant);
-            await _dbContext.SaveChangesAsync();
-        }
     }
 }

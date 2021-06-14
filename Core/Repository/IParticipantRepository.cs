@@ -6,13 +6,8 @@ using Core.Domain;
 
 namespace Core.Repository
 {
-    public interface IParticipantRepository: IRepository
+    public interface IParticipantRepository: IEntityRepository<Participant>
     {
 
-        Task<Participant> GetAsync(Guid id);
-        Task<IEnumerable<Participant>> BrowseAsync();
-        Task AddAsync(Participant participant);
-        Task UpdateAsync(Participant participant);
-        Task DeleteAsync(Participant participant);
     }
 }

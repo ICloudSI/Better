@@ -25,20 +25,20 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<MatchDTO>> BrowseMatch()
         {
-            var matches = await _matchRepository.BrowseAsync();
+            var matches = await _matchRepository.GetAll();
             var matchesToReturn = _mapper.Map<IEnumerable<MatchDTO>>(matches);
             return matchesToReturn;
         }
 
         public async Task<MatchDTO> CreateMatch(CreateMatchModel createMatch)
         {
-            var participantHome = await _participantRepository.GetAsync(createMatch.IdParticipantHome);
+            var participantHome = await _participantRepository.GetById(createMatch.IdParticipantHome);
             if (participantHome == null)
             {
                 throw new AppException("Home participant doesn't exist.");
             }
 
-            var participantAway = await _participantRepository.GetAsync(createMatch.IdParticipantAway);
+            var participantAway = await _participantRepository.GetById(createMatch.IdParticipantAway);
             if (participantAway == null)
             {
                 throw new AppException("Away participant doesn't exist.");
@@ -48,7 +48,7 @@ namespace Infrastructure.Services
 
             var match = new Match(new Guid(), matchParticipant,DateTime.Now, createMatch.BeginsAt);
 
-            await _matchRepository.AddAsync(match);
+            await _matchRepository.Insert(match);
 
             return _mapper.Map<MatchDTO>(match);
         }

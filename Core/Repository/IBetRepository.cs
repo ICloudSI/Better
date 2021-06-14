@@ -6,14 +6,10 @@ using Core.Domain;
 
 namespace Core.Repository
 {
-    public interface IBetRepository: IRepository
+    public interface IBetRepository : IEntityRepository<Bet>
     {
-        Task<Bet> GetAsync(Guid id);
         Task<IEnumerable<Bet>> GetMatchBetsAsync(Guid matchId);
         Task<IEnumerable<Bet>> GetUserBetsAsync(Guid userId);
-        Task<IEnumerable<Bet>> BrowseAsync();
-        Task AddAsync(Bet bet);
-        Task UpdateAsync(Bet bet);
-        Task DeleteAsync(Bet bet);
+
     }
 }

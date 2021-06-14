@@ -28,7 +28,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<BetDTO>> BrowseAll()
         {
-            var bets = await _betRepository.BrowseAsync();
+            var bets = await _betRepository.GetAll();
             return _mapper.Map<IEnumerable<BetDTO>>(bets);
         }
         public async Task<IEnumerable<BetDTO>> BrowseMatchBets(Guid id)
@@ -45,7 +45,7 @@ namespace Infrastructure.Services
 
         public async Task<BetDTO> CreateBet(CreateBetModel newBet)
         {
-            var match = await _matchRepository.GetAsync(newBet.MatchConcernedId);
+            var match = await _matchRepository.GetById(newBet.MatchConcernedId);
             if (match == null)
             {
                 throw new AppException($"Match with id: {newBet.MatchConcernedId} doesn't exits.");
@@ -57,9 +57,9 @@ namespace Infrastructure.Services
                 throw new AppException($"The member with id: {newBet.BetParticipantId} does not participate in the match.");
             }
 
-            var participants = await _participantRepository.GetAsync(newBet.BetParticipantId);
+            var participants = await _participantRepository.GetById(newBet.BetParticipantId);
 
-            var ownerUser = await _userRepository.GetSimpleUserAsync(newBet.OwnerId);
+            var ownerUser = await _userRepository.GetById(newBet.OwnerId);
             if (newBet.Value <= 0)
             {
                 throw new AppException($"The bet cannot be negative.");
@@ -78,8 +78,8 @@ namespace Infrastructure.Services
             
             var bet = new Bet(match, newBet.Value,participants,ownerUser, DateTime.Now);
 
-            await _userRepository.UpdateAsync(ownerUser);
-            await _betRepository.AddAsync(bet);
+            await _userRepository.Update(ownerUser);
+            await _betRepository.Insert(bet);
 
             return _mapper.Map<BetDTO>(bet);
         }

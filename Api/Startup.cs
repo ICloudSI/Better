@@ -37,7 +37,7 @@ namespace Api
         {
             services.AddCors();
             services.AddDbContext<BetterContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
             services.BuildServiceProvider().GetService<BetterContext>().Database.Migrate();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();

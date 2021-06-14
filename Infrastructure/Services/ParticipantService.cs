@@ -9,7 +9,7 @@ using Infrastructure.DTO;
 
 namespace Infrastructure.Services
 {
-    public class ParticipantService:IParticipantService
+    public class ParticipantService : IParticipantService
     {
         private readonly IParticipantRepository _participantRepository;
         private readonly IMapper _mapper;
@@ -23,14 +23,14 @@ namespace Infrastructure.Services
         public async Task<ParticipantDTO> CreateParticipant(CreateParticipantModel participant)
         {
             var newParticipant = new Participant(Guid.NewGuid(), participant.Name);
-            await _participantRepository.AddAsync(newParticipant);
+            await _participantRepository.Insert(newParticipant);
 
             return _mapper.Map<ParticipantDTO>(newParticipant);
         }
 
         public async Task<IEnumerable<ParticipantDTO>> BrowseAll()
         {
-            var allParticipants = await _participantRepository.BrowseAsync();
+            var allParticipants = await _participantRepository.GetAll();
 
             return _mapper.Map<IEnumerable<ParticipantDTO>>(allParticipants);
         }

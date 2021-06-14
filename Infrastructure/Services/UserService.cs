@@ -26,14 +26,14 @@ namespace Infrastructure.Services
 
         public async Task<FullUserWithBetsDTO> GetUserAsync(Guid id)
         {
-            var user = await _userRepository.GetFullUserAsync(id);
+            var user = await _userRepository.GetById(id);
 
             return _mapper.Map<FullUserWithBetsDTO>(user);
         }
 
         public async Task<IEnumerable<SimpleUserDTO>> BrowseAsync()
         {
-            var users = await _userRepository.BrowseAsync();
+            var users = await _userRepository.GetAll();
             var usersToReturn = _mapper.Map<IEnumerable<SimpleUserDTO>>(users);
 
             return usersToReturn;
@@ -41,7 +41,7 @@ namespace Infrastructure.Services
 
         public async Task<SimpleUserDTO> AddCoins(AddCoinsModel addCoins)
         {
-            var user = await _userRepository.GetSimpleUserAsync(addCoins.UserId);
+            var user = await _userRepository.GetById(addCoins.UserId);
             if (user == null)
             {
                 throw new AppException($"User with id {addCoins.UserId} doesn't exist");
@@ -54,7 +54,7 @@ namespace Infrastructure.Services
             }
 
             user.Coins += addCoins.Value;
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.Update(user);
             return _mapper.Map<SimpleUserDTO>(user);
         }
 
@@ -66,7 +66,7 @@ namespace Infrastructure.Services
                 throw new AppException("Email or password is incorrect");
             }
 
-            var user = await _userRepository.GetSimpleUserAsync(loginData.Email);
+            var user = await _userRepository.GetFullUserAsync(loginData.Email);
             if (user == null)
             {
                 throw new AppException($"User with email {loginData.Email} doesn't exist");
@@ -89,7 +89,7 @@ namespace Infrastructure.Services
             var userToRegister = _mapper.Map<User>(registeringUser);
             userToRegister.Email = userToRegister.Email.ToLower();
 
-            var user = await _userRepository.GetSimpleUserAsync(userToRegister.Email);
+            var user = await _userRepository.GetFullUserAsync(userToRegister.Email);
             if (user != null)
             {
                 throw new AppException($"User with email: {registeringUser.Email} already exist");
@@ -103,7 +103,7 @@ namespace Infrastructure.Services
             userToRegister.PasswordHash = passwordHash;
             userToRegister.PasswordSalt = passwordSalt;
 
-           await _userRepository.AddAsync(userToRegister);
+           await _userRepository.Insert(userToRegister);
 
             var userToReturn = _mapper.Map<SimpleUserDTO>(userToRegister);
             return userToReturn;
