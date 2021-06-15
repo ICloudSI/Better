@@ -12,6 +12,7 @@ namespace Core.Domain
         public DateTime CreatedAt { get; set; }
         public DateTime BeginsAt { get; set; }
         public Participant Winner { get; set; }
+        public MatchStatus Status { get; set; }
         public IEnumerable<Bet> Bets => _bets;
 
         protected Match()
@@ -24,6 +25,7 @@ namespace Core.Domain
             Participants = participants;
             CreatedAt = createdAt;
             BeginsAt = beginsAt;
+            Status = MatchStatus.Before;
         }
     }
 

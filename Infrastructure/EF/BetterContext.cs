@@ -11,8 +11,8 @@ namespace Infrastructure.EF
     {
         public BetterContext(DbContextOptions<BetterContext> options): base(options)
         {
-            
         }
+
 
         public DbSet<User> Users { get; set; }
         public DbSet<Participant> Participants { get; set; }

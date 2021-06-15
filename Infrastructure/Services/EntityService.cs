@@ -13,14 +13,20 @@ namespace Infrastructure.Services
         protected readonly IEntityRepository<Ent> _entityRepository;
         protected readonly IMapper _mapper;
 
-        public EntityService(IEntityRepository<Ent> entityRepository, IMapper mapper)
+        protected EntityService(IEntityRepository<Ent> entityRepository, IMapper mapper)
         {
             _entityRepository = entityRepository;
             _mapper = mapper;
         }
+
         public async Task<IEnumerable<Dto>> BrowseAll()
         {
             return _mapper.Map<IEnumerable<Dto>>(await _entityRepository.GetAll());
+        }
+
+        public async Task<Dto> GetById(Guid id)
+        {
+            return _mapper.Map<Dto>(await _entityRepository.GetById(id));
         }
     }
 }

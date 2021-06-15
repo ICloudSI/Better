@@ -6,31 +6,32 @@ using Core.Domain;
 using Core.Repository;
 using Infrastructure.DTO;
 using Infrastructure.Excpections;
+using Infrastructure.Services.Algorithm;
 
 namespace Infrastructure.Services
 {
-    public class BetService: IBetService
+    public class BetService: EntityService<Bet, BetDTO>, IBetService
     {
         private readonly IBetRepository _betRepository;
         private readonly IMatchRepository _matchRepository;
         private readonly IUserRepository _userRepository;
         private readonly IParticipantRepository _participantRepository;
-        private readonly IMapper _mapper;
+        private readonly IAlgorithm _algorithm;
 
-        public BetService(IBetRepository betRepository, IMatchRepository matchRepository, IUserRepository userRepository, IParticipantRepository participantRepository, IMapper mapper)
+        public BetService(IBetRepository betRepository,
+            IMatchRepository matchRepository,
+            IUserRepository userRepository,
+            IParticipantRepository participantRepository,
+            IMapper mapper,
+            IAlgorithm algorithm):base(betRepository, mapper)
         {
             _betRepository = betRepository;
             _matchRepository = matchRepository;
             _userRepository = userRepository;
             _participantRepository = participantRepository;
-            _mapper = mapper;
+            _algorithm = algorithm;
         }
 
-        public async Task<IEnumerable<BetDTO>> BrowseAll()
-        {
-            var bets = await _betRepository.GetAll();
-            return _mapper.Map<IEnumerable<BetDTO>>(bets);
-        }
         public async Task<IEnumerable<BetDTO>> BrowseMatchBets(Guid id)
         {
             var bets = await _betRepository.GetMatchBetsAsync(id);
@@ -82,6 +83,31 @@ namespace Infrastructure.Services
             await _betRepository.Insert(bet);
 
             return _mapper.Map<BetDTO>(bet);
+        }
+
+        public async Task WithdrawPrize(Guid matchId)
+        {
+            var matchFromRepo = await _matchRepository.GetById(matchId);
+            if (matchFromRepo != null && matchFromRepo.Status != MatchStatus.Finished)
+            {
+                throw new AppException("The match is not over");
+            }
+
+            var bets = await _betRepository.GetMatchBetsAsync(matchId);
+            var multiplyPrize = _algorithm.MultiplierForWinner(bets, matchFromRepo.Winner);
+            foreach (var bet in bets)
+            {
+                if (bet.BetParticipant == matchFromRepo.Winner && bet.Realized == false)
+                {
+                    var prize = Decimal.Round(bet.Value * multiplyPrize);
+                    var user = bet.Owner;
+                    user.Coins += prize;
+                    await _userRepository.Update(user);
+                }
+
+                bet.Realized = true;
+                await _betRepository.Update(bet);
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Api.Controllers
         [HttpGet("Browse")]
         public async Task<IActionResult> BrowseAll()
         {
-            return Ok(await _matchService.BrowseMatch());
+            return Ok(await _matchService.BrowseAll());
         }
 
         [HttpPost("Create")]
@@ -51,6 +51,15 @@ namespace Api.Controllers
             createBetModel.OwnerId = UserId;
 
             return Ok(await _betService.CreateBet(createBetModel));
+
+        }
+
+        [HttpPost("{matchId}/SetWinner")]
+        public async Task<IActionResult> SetWinner(SetWinnerModel setWinnerModel, Guid matchId)
+        { 
+            setWinnerModel.MatchId = matchId;
+
+            return Ok(await _matchService.SetWinner(setWinnerModel));
 
         }
     }
