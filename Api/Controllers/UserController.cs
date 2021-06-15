@@ -34,7 +34,7 @@ namespace Api.Controllers
         [HttpGet("Browse")]
         public async Task<IActionResult> GetAll()
         {
-            var usersToReturn = await _userService.BrowseAsync();
+            var usersToReturn = await _userService.BrowseAll();
 
             return Ok(usersToReturn);
         }

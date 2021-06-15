@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Api.Framework;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Core.Repository;
 using Infrastructure.EF;
+using Infrastructure.IoC;
 using Infrastructure.Repository;
 using Infrastructure.Services;
 using Infrastructure.Settings;
@@ -32,6 +35,7 @@ namespace Api
         }
 
         public IConfiguration Configuration { get; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,20 +44,11 @@ namespace Api
             services.AddDbContext<BetterContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
             services.BuildServiceProvider().GetService<BetterContext>().Database.Migrate();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IMatchRepository, MatchRepository>();
-            services.AddScoped<IParticipantRepository, ParticipantRepository>();
-            services.AddScoped<IBetRepository, BetRepository>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IMatchService, MatchService>();
-            services.AddScoped<IBetService, BetService>();
-            services.AddScoped<IParticipantService, ParticipantService>();
 
             services.AddScoped<IJwtHandler, JwtHandler>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
-
 
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -80,7 +75,15 @@ namespace Api
                         ValidateAudience = false
                     };
                 });
+
+            services.AddOptions();
         }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new ContainerModule(Configuration));
+        }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -91,6 +94,7 @@ namespace Api
                 
             }
 
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseHttpsRedirection();
 
             app.UseRouting();

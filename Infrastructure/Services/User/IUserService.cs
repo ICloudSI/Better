@@ -7,10 +7,9 @@ using Infrastructure.DTO;
 
 namespace Infrastructure.Services
 {
-    public interface IUserService: IService
+    public interface IUserService: IService, IEntityService<User, SimpleUserDTO>
     {
         Task<FullUserWithBetsDTO> GetUserAsync(Guid id);
-        Task<IEnumerable<SimpleUserDTO>> BrowseAsync();
         Task<SimpleUserDTO> AddCoins(AddCoinsModel addCoins);
         Task<SimpleUserDTO> RegisterAsync(RegisterModel registeringUser);
         Task<TokenJwtDTO> LoginAsync(LoginModel loginData);

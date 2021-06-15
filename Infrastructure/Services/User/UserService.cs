@@ -11,37 +11,28 @@ using Infrastructure.Excpections;
 
 namespace Infrastructure.Services
 {
-    public class UserService: IUserService
+    public class UserService: EntityService<User,SimpleUserDTO>, IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
         private readonly IJwtHandler _jwtHandler;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IJwtHandler jwtHandler)
+        public UserService(IUserRepository userRepository, IMapper mapper, IJwtHandler jwtHandler):base(userRepository, mapper)
         {
             _userRepository = userRepository;
-            _mapper = mapper;
             _jwtHandler = jwtHandler;
         }
 
         public async Task<FullUserWithBetsDTO> GetUserAsync(Guid id)
         {
-            var user = await _userRepository.GetById(id);
+            var user = await _entityRepository.GetById(id);
 
             return _mapper.Map<FullUserWithBetsDTO>(user);
         }
 
-        public async Task<IEnumerable<SimpleUserDTO>> BrowseAsync()
-        {
-            var users = await _userRepository.GetAll();
-            var usersToReturn = _mapper.Map<IEnumerable<SimpleUserDTO>>(users);
-
-            return usersToReturn;
-        }
 
         public async Task<SimpleUserDTO> AddCoins(AddCoinsModel addCoins)
         {
-            var user = await _userRepository.GetById(addCoins.UserId);
+            var user = await _entityRepository.GetById(addCoins.UserId);
             if (user == null)
             {
                 throw new AppException($"User with id {addCoins.UserId} doesn't exist");
@@ -54,7 +45,7 @@ namespace Infrastructure.Services
             }
 
             user.Coins += addCoins.Value;
-            await _userRepository.Update(user);
+            await _entityRepository.Update(user);
             return _mapper.Map<SimpleUserDTO>(user);
         }
 
@@ -103,7 +94,7 @@ namespace Infrastructure.Services
             userToRegister.PasswordHash = passwordHash;
             userToRegister.PasswordSalt = passwordSalt;
 
-           await _userRepository.Insert(userToRegister);
+           await _entityRepository.Insert(userToRegister);
 
             var userToReturn = _mapper.Map<SimpleUserDTO>(userToRegister);
             return userToReturn;

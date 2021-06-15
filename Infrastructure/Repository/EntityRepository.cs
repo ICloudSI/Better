@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Infrastructure.Repository
 {
-    public class EntityRepository<T> : IEntityRepository<T> where T : Entity
+    public abstract class EntityRepository<T> : IEntityRepository<T> where T : Entity
     {
         protected BetterContext _context = null;
         protected DbSet<T> table = null;
