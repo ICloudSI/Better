@@ -9,6 +9,6 @@ namespace Infrastructure.Services
     public interface IEntityService<Ent, Dto > : IService where Ent : Entity
     {
         Task<IEnumerable<Dto>> BrowseAll();
-
+        Task<Dto> GetById(Guid id);
     }
 }

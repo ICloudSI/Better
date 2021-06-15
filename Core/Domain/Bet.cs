@@ -11,6 +11,7 @@ namespace Core.Domain
         public Participant BetParticipant { get; set; }
         public User Owner { get; set; }
         public DateTime BetDate { get; set; }
+        public bool Realized { get; set; }
 
         protected Bet()
         {
@@ -23,6 +24,7 @@ namespace Core.Domain
             BetParticipant = betParticipant;
             Owner = owner;
             BetDate = betDate;
+            Realized = false;
         }
     }
 }

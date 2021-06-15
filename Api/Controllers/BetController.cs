@@ -19,5 +19,14 @@ namespace Api.Controllers
             _betService = betService;
         }
 
+        [HttpPut("{matchId}/Withdraw")]
+        public async Task<IActionResult> WithdrawPrize(Guid matchId)
+        {
+
+            await _betService.WithdrawPrize(matchId);
+            return Ok();
+
+        }
+
     }
 }
