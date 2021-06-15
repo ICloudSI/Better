@@ -58,42 +58,25 @@ namespace Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterUser(RegisterModel registerModel)
         {
-            try
-            {
-                var user = await _userService.RegisterAsync(registerModel);
-                return Ok(user);
-            }
-            catch (AppException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+      
+            var user = await _userService.RegisterAsync(registerModel);
+            return Ok(user);
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            try
-            {
-                var token = await _userService.LoginAsync(loginModel);
-                return Ok(token);
-            }
-            catch (AppException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+
+            var token = await _userService.LoginAsync(loginModel);
+            return Ok(token);
         }
 
         [HttpPut("Coins/Add")]
         public async Task<IActionResult> AddCoins(AddCoinsModel addCoinsModel)
         {
-            try
-            {
-                return Ok(await _userService.AddCoins(addCoinsModel));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+
+            return Ok(await _userService.AddCoins(addCoinsModel));
+
         }
         
     }

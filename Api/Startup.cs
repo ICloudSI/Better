@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Api.Framework;
 using AutoMapper;
 using Core.Repository;
 using Infrastructure.EF;
@@ -94,6 +95,9 @@ namespace Api
 
             app.UseRouting();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseMiddleware<ExcpetionHandlerMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
