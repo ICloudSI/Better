@@ -4,6 +4,7 @@ using System.Text;
 using AutoMapper;
 using Core.Domain;
 using Infrastructure.DTO;
+using Infrastructure.DTO.User;
 
 namespace Infrastructure.Mappers
 {
@@ -11,8 +12,7 @@ namespace Infrastructure.Mappers
     {
         public UserMapper()
         {
-            CreateMap<User, SimpleUserDTO>();
-            CreateMap<User, FullUserWithBetsDTO>();
+            CreateMap<User, UserDto>().ReverseMap();
             CreateMap<RegisterModel, User>();
         }
     }

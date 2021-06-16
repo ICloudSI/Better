@@ -10,7 +10,7 @@ namespace Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ApiControllerBase : ControllerBase
+    public abstract class ApiControllerBase : ControllerBase
     {
         protected Guid UserId => User?.Identity?.IsAuthenticated == true ?
             Guid.Parse((User.Identity as ClaimsIdentity).Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value) :
