@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.Domain;
 using Infrastructure.DTO;
 using Infrastructure.Excpections;
 using Infrastructure.Services;
@@ -14,7 +15,7 @@ namespace Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class MatchController : ApiControllerBase
+    public class MatchController : AbstractController<Match, MatchDTO>
     {
         private readonly IMatchService _matchService;
         private readonly IBetService _betService;
@@ -27,11 +28,16 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("Browse")]
-        public async Task<IActionResult> BrowseAll()
+        protected override EntityService<Match, MatchDTO> getService()
         {
-            return Ok(await _matchService.BrowseAll());
+            return (EntityService<Match, MatchDTO>)_matchService;
         }
+
+        // [HttpGet("Browse")]
+        // public async Task<IActionResult> BrowseAll()
+        // {
+        //     return Ok(await _matchService.BrowseAll());
+        // }
 
         [HttpPost("Create")]
         public async Task<IActionResult> CreateMatch(CreateMatchModel createMatchModel)

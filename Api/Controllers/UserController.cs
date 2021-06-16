@@ -9,6 +9,7 @@ using Core.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.DTO;
+using Infrastructure.DTO.User;
 using Infrastructure.Excpections;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ namespace Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ApiControllerBase
+    public class UserController : AbstractController<User, UserDto>
     {
         private readonly IUserService _userService;
         private readonly IBetService _betService;
@@ -31,13 +32,17 @@ namespace Api.Controllers
 
         }
 
-        [HttpGet("Browse")]
-        public async Task<IActionResult> GetAll()
+        protected override EntityService<User, UserDto> getService()
         {
-            var usersToReturn = await _userService.BrowseAll();
-
-            return Ok(usersToReturn);
+            return (EntityService<User, UserDto>)_userService;
         }
+        // [HttpGet("Browse")]
+        // public async Task<IActionResult> GetAll()
+        // {
+        //     var usersToReturn = await _userService.BrowseAll();
+        //
+        //     return Ok(usersToReturn);
+        // }
 
         [HttpGet]
         [Authorize]
