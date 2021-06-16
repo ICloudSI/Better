@@ -4,14 +4,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Domain;
 using Infrastructure.DTO;
+using Infrastructure.DTO.User;
 
 namespace Infrastructure.Services
 {
-    public interface IUserService: IService, IEntityService<User, SimpleUserDTO>
+    public interface IUserService: IService, IEntityService<User, UserDto>
     {
-        Task<FullUserWithBetsDTO> GetUserAsync(Guid id);
-        Task<SimpleUserDTO> AddCoins(AddCoinsModel addCoins);
-        Task<SimpleUserDTO> RegisterAsync(RegisterModel registeringUser);
+        Task<UserDto> AddCoins(AddCoinsModel addCoins);
+        Task<UserDto> RegisterAsync(RegisterModel registeringUser);
         Task<TokenJwtDTO> LoginAsync(LoginModel loginData);
     }
 }

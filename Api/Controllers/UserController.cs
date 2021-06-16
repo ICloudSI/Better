@@ -43,7 +43,7 @@ namespace Api.Controllers
         [Authorize]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _userService.GetUserAsync(UserId));
+            return Ok(await _userService.GetById(UserId));
         }
 
         [HttpGet("Bets")]

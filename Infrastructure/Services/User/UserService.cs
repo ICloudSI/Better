@@ -6,12 +6,13 @@ using AutoMapper;
 using Core.Domain;
 using Core.Repository;
 using Infrastructure.DTO;
+using Infrastructure.DTO.User;
 using Infrastructure.Excpections;
 
 
 namespace Infrastructure.Services
 {
-    public class UserService: EntityService<User,SimpleUserDTO>, IUserService
+    public class UserService: EntityService<User, UserDto>, IUserService
     {
         private readonly IJwtHandler _jwtHandler;
         private readonly IUserRepository _userRepository;
@@ -22,15 +23,8 @@ namespace Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<FullUserWithBetsDTO> GetUserAsync(Guid id)
-        {
-            var user = await _entityRepository.GetById(id);
 
-            return _mapper.Map<FullUserWithBetsDTO>(user);
-        }
-
-
-        public async Task<SimpleUserDTO> AddCoins(AddCoinsModel addCoins)
+        public async Task<UserDto> AddCoins(AddCoinsModel addCoins)
         {
             var user = await _entityRepository.GetById(addCoins.UserId);
             if (user == null)
@@ -46,7 +40,7 @@ namespace Infrastructure.Services
 
             user.Coins += addCoins.Value;
             await _entityRepository.Update(user);
-            return _mapper.Map<SimpleUserDTO>(user);
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<TokenJwtDTO> LoginAsync(LoginModel loginData)
@@ -70,12 +64,12 @@ namespace Infrastructure.Services
 
             var token = _jwtHandler.CreateToken(user);
 
-            token.User = _mapper.Map<SimpleUserDTO>(user);
+            token.User = _mapper.Map<UserDto>(user);
 
             return token;
         }
 
-        public async Task<SimpleUserDTO> RegisterAsync(RegisterModel registeringUser)
+        public async Task<UserDto> RegisterAsync(RegisterModel registeringUser)
         {
             var userToRegister = _mapper.Map<User>(registeringUser);
             userToRegister.Email = userToRegister.Email.ToLower();
@@ -96,7 +90,7 @@ namespace Infrastructure.Services
 
            await _entityRepository.Insert(userToRegister);
 
-            var userToReturn = _mapper.Map<SimpleUserDTO>(userToRegister);
+            var userToReturn = _mapper.Map<UserDto>(userToRegister);
             return userToReturn;
         }
 

@@ -47,7 +47,6 @@ namespace Api
 
 
             services.AddScoped<IJwtHandler, JwtHandler>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
 
 

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.DTO
+namespace Infrastructure.DTO.User
 {
-    public class FullUserWithBetsDTO
+    public class UserDto
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
