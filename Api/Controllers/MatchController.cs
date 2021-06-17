@@ -33,12 +33,6 @@ namespace Api.Controllers
             return (EntityService<Match, MatchDTO>)_matchService;
         }
 
-        // [HttpGet("Browse")]
-        // public async Task<IActionResult> BrowseAll()
-        // {
-        //     return Ok(await _matchService.BrowseAll());
-        // }
-
         [HttpPost("Create")]
         public async Task<IActionResult> CreateMatch(CreateMatchModel createMatchModel)
         {

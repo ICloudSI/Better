@@ -11,7 +11,7 @@ namespace Infrastructure.Mappers
     {
         public ParticipantMapper()
         {
-            CreateMap<Participant, ParticipantDTO>();
+            CreateMap<Participant, ParticipantDTO>().ReverseMap(); ;
             CreateMap<ParticipantsMatch, ParticipantsDTO>();
         }
     }

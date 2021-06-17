@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Infrastructure.DTO.User
 {
-    public class UserDto
+    public class UserDto : EntityDto
     {
-        public Guid Id { get; set; }
+
         public string Email { get; set; }
         public string Username { get; set; }
         public string FullName { get; set; }

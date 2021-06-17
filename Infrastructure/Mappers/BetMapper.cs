@@ -16,7 +16,7 @@ namespace Infrastructure.Mappers
                         MapFrom(src => src.MatchConcerned.Id)).
                 ForMember(dest => dest.OwnerId,
                     opt => opt.
-                        MapFrom(src => src.Owner.Id));
+                        MapFrom(src => src.Owner.Id)).ReverseMap();
         }
     }
 }

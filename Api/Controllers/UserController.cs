@@ -36,19 +36,19 @@ namespace Api.Controllers
         {
             return (EntityService<User, UserDto>)_userService;
         }
-        // [HttpGet("Browse")]
-        // public async Task<IActionResult> GetAll()
-        // {
-        //     var usersToReturn = await _userService.BrowseAll();
-        //
-        //     return Ok(usersToReturn);
-        // }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
         {
             return Ok(await _userService.GetById(UserId));
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public override async Task<IActionResult> GetById(Guid id)
+        {
+            return Ok(await _userService.GetById(id));
         }
 
         [HttpGet("Bets")]

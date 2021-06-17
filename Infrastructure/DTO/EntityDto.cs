@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Infrastructure.DTO
 {
-    public class ParticipantDTO : EntityDto
+    public abstract class EntityDto
     {
-        public string Name { get; set; }
-
+        public Guid Id { get; set; }
     }
 }

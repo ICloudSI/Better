@@ -18,7 +18,7 @@ namespace Infrastructure.Mappers
                         src.Bets.Where(home => home.BetParticipant == src.Participants.Home).Sum(sum => sum.Value))).
                 ForMember(dest => dest.ValueBetOnAway,
                     opt => opt.MapFrom(src =>
-                        src.Bets.Where(away => away.BetParticipant == src.Participants.Away).Sum(sum => sum.Value)));
+                        src.Bets.Where(away => away.BetParticipant == src.Participants.Away).Sum(sum => sum.Value))).ReverseMap(); ;
 
         }
     }
