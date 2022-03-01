@@ -37,6 +37,7 @@ namespace Api.Controllers
             return (EntityService<User, UserDto>)_userService;
         }
 
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
