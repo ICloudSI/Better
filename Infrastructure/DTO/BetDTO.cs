@@ -5,7 +5,7 @@ using Core.Domain;
 
 namespace Infrastructure.DTO
 {
-    public class BetDTO
+    public class BetDTO : EntityDto
     {
         public Guid MatchId { get; set; }
         public decimal Value { get; set; }

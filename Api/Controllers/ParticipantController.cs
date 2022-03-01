@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Domain;
 using Core.Repository;
 using Infrastructure.DTO;
 using Infrastructure.Services;
@@ -12,7 +13,7 @@ namespace Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ParticipantController : ApiControllerBase
+    public class ParticipantController : AbstractController<Participant, ParticipantDTO>
     {
         private readonly IParticipantService _participantService;
 
@@ -21,10 +22,9 @@ namespace Api.Controllers
             _participantService = participantService;
         }
 
-        [HttpGet("Browse")]
-        public async Task<IActionResult> BrowseAll()
+        protected override EntityService<Participant, ParticipantDTO> getService()
         {
-            return Ok(await _participantService.BrowseAll());
+            return (EntityService<Participant, ParticipantDTO>)_participantService;
         }
 
         [HttpPost]

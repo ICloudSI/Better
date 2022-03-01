@@ -40,7 +40,7 @@ namespace Infrastructure.Repository
 
         public Task Update(T obj)
         {
-            table.Attach(obj);
+            // table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
             _context.SaveChanges();
             return Task.CompletedTask;

@@ -45,6 +45,13 @@ namespace Api.Controllers
             return Ok(await _userService.GetById(UserId));
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public override async Task<IActionResult> GetById(Guid id)
+        {
+            return Ok(await _userService.GetById(id));
+        }
+
         [HttpGet("Bets")]
         [Authorize]
         public async Task<IActionResult> GetUserBets()
