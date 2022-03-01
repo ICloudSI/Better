@@ -36,13 +36,7 @@ namespace Api.Controllers
         {
             return (EntityService<User, UserDto>)_userService;
         }
-        // [HttpGet("Browse")]
-        // public async Task<IActionResult> GetAll()
-        // {
-        //     var usersToReturn = await _userService.BrowseAll();
-        //
-        //     return Ok(usersToReturn);
-        // }
+
 
         [HttpGet]
         [Authorize]
@@ -54,7 +48,7 @@ namespace Api.Controllers
         [HttpGet("Bets")]
         [Authorize]
         public async Task<IActionResult> GetUserBets()
-    {
+        {
             return Ok(await _betService.BrowseUserBets(UserId));
             
         }
