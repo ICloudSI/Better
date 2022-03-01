@@ -54,7 +54,7 @@ namespace Api.Controllers
         [HttpGet("Bets")]
         [Authorize]
         public async Task<IActionResult> GetUserBets()
-    {
+        {
             return Ok(await _betService.BrowseUserBets(UserId));
             
         }
